@@ -1,0 +1,42 @@
+name: CI- train & save model
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  matrix-pip:
+    name: train & save the model
+    runs-on: ubuntu-latest
+    startegy:                 #how do you run same jobs on multiple python versions, this is where we use the startegy called matrix
+      matrix:
+        python: [3.11, 3.12]  #just increase the no of versions on which you want to test your models
+
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+            python-version: ${{ matrix.python }}
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install project dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Train the model
+        run: |
+            python train.py
+            ls -la artifacts
+
+      - name: Uploads artifacts
+        uses: actions/upload-artifact@v4
+        with:
+            name: ml-artifacts-${{ matrix.python }}-${{ github.run_id }}       #saving model file with unique name just to make distinction   
+            path: artifacts                                                    #artifacts are stored in artifacts folder                                        
