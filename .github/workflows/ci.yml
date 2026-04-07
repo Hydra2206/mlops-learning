@@ -10,7 +10,7 @@ jobs:
   matrix-pip:
     name: train & save the model
     runs-on: ubuntu-latest
-    startegy:                 #how do you run same jobs on multiple python versions, this is where we use the startegy called matrix
+    strategy:                 #how do you run same jobs on multiple python versions, this is where we use the startegy called matrix
       matrix:
         python: [3.11, 3.12]  #just increase the no of versions on which you want to test your models
 
